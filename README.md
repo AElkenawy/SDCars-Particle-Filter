@@ -2,28 +2,28 @@
 
 ## Project goal
 
-Implementation of a 2 dimensional particle filter to localize a kidnapped vehicle within an environment of landmarks. The vehicle has a map of its environment and receives sensor (observations) data, control data at each time step.
+Implementation of a 2 dimensional particle filter to localize a kidnapped vehicle within an environment of landmarks. The vehicle has a map of its environment, receives sensor (observations) data and control data at each time step.
 
 ## Project steps
 
-1. Obtaining map of landmarks and sensor observations: A map of landmarks with coordinates _(x_f, y_f)_ and Landmark ID _id_i_ is stored in `landmark_list.map_landmarks` a member of `class Map`. Sensor observations are stored in a `struct LandmarkObs` vector with attributes of _id, x and y_. Landmarks are illustrated as black circles with crosses inside, while detected landmarks by the sensor (within sensor range) are connected with green lines as shown in Udacity simulator
+1. Obtaining map of landmarks and sensor observations: A map of landmarks with coordinates _(x_f, y_f)_ and Landmark ID _id_i_ is stored in `landmark_list.map_landmarks` (member of `class Map`). Sensor observations are stored in a `struct LandmarkObs` vector with attributes of _id, x and y_. Landmarks are illustrated as black circles with crosses inside, while detected landmarks by the sensor (within sensor range) are attached with green lines as shown in Udacity simulator
 <img src="./imgs/1_map_observs.PNG" alt="Udacity simulator map view" width="450" height="250">
 
-2. Filter initialization: Position coordinates (_x, y_) and orientation _theta_ are initialized with a noisy GPS measurement, while particles weight are set to zero.
+2. Filter initialization: Position coordinates _(x, y)_ and orientation _theta_ are initialized using a noisy GPS measurement, while particles weight are set to zero.
 
-3. System states prediction: The prediction step is done using the Predict method `ParticleFilter::prediction()` which contains Constant turn rate and velocity (CTRV) process motion model.
-<img src="./imgs/2_CTRV.PNG" alt="Motion model" width="450" height="250">
-CV model is used in case of straigt-line driving _(theta = 0)_.
+3. System states prediction: The prediction step is done using `ParticleFilter::prediction()` which contains Constant turn rate and velocity (CTRV) process motion model.
+<img src="./imgs/2_CTRV.PNG" alt="Motion model">
+
+CV model is used in case of straigt-line driving _(theta=0)_.
 
 4. Particles weight update:
-- Observations local coordinates transformation to map global coordinates
-- Landmark detection (within sensor range)
-- Observed-predicted landmarks association
-- Particles weight update _is done using multi-variate gaussian probability distribution formula_
-<img src="./imgs/3_mgauss.PNG" alt="Multi gaussian">
-<img src="./imgs/3_mgauss.PNG" alt="Multi gaussian" width="450" height="250">
+  - Observations local coordinates transformation to map global coordinates
+  - Landmark detection (within sensor range)
+  - Observed-predicted landmarks association
+  - Particles weight update _is done using multi-variate gaussian probability distribution formula_
+  <img src="./imgs/3_mgauss.PNG" alt="Multi gaussian">
 
-- Particles resampling
+  - Particles resampling
 
 5. Filter testing: The simulation test is run for around 50 seconds with a time step of 20 milliseconds (2500 time steps). In case of successful test with low estimation error, a message of **Success! Your particle filter passed!** is shown 
 <img src="./imgs/4_success.PNG" alt="Filer Success message" width="450" height="250">
@@ -31,8 +31,8 @@ CV model is used in case of straigt-line driving _(theta = 0)_.
 
 ## Reflection
 
-In this project the control input of velocity is small (range of 10 to 40 kph), which will cause a higher error if the same motion model of CTRV is used in case of real life with higher velocities. In such a case, CTRA motion model will give a better estimation of system states.
-<img src="./imgs/5_CTRA.PNG" alt="CTRA motion model" width="450" height="250">
+In this project the control input of velocity is small (range of 10 to 40 kph), which will cause a higher error if the same motion model of CTRV is used in case of real life with higher velocities. In such a case, Constant turn rate and acceleration (CTRA) motion model, described by the following transition matrix, will give a better estimation of system states.
+<img src="./imgs/5_CTRA.PNG" alt="CTRA motion model">
 
 
 
